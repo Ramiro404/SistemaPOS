@@ -12,8 +12,8 @@ using SistemaPOS.Infrastructure.Persistence;
 namespace SistemaPOS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241114224246_UsuarioMigracion")]
-    partial class UsuarioMigracion
+    [Migration("20241115201816_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -172,10 +172,6 @@ namespace SistemaPOS.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClienteId");
-
-                    b.HasIndex("ProductoId");
-
                     b.ToTable("Pedidos");
                 });
 
@@ -262,35 +258,6 @@ namespace SistemaPOS.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Usuarios");
-                });
-
-            modelBuilder.Entity("SistemaPOS.Domain.Entities.Pedido", b =>
-                {
-                    b.HasOne("SistemaPOS.Domain.Entities.Cliente", "Cliente")
-                        .WithMany("Pedidos")
-                        .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SistemaPOS.Domain.Entities.Producto", "Producto")
-                        .WithMany("Pedidos")
-                        .HasForeignKey("ProductoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cliente");
-
-                    b.Navigation("Producto");
-                });
-
-            modelBuilder.Entity("SistemaPOS.Domain.Entities.Cliente", b =>
-                {
-                    b.Navigation("Pedidos");
-                });
-
-            modelBuilder.Entity("SistemaPOS.Domain.Entities.Producto", b =>
-                {
-                    b.Navigation("Pedidos");
                 });
 #pragma warning restore 612, 618
         }

@@ -19,7 +19,7 @@ namespace SistemaPOS.Infrastructure.Data
         public async Task CrearProducto(Producto producto)
         {
             string productoNombre = producto.Nombre.ToLower();
-            var productoExiste = await _context.Productos.Where(p => p.Nombre.ToLower().Equals(productoNombre);
+            var productoExiste = await _context.Productos.Where(p => p.Nombre.ToLower() == productoNombre).SingleAsync();
             if(productoExiste is not null)
             {
                 throw new Exception("Este producto ya esta registrado");

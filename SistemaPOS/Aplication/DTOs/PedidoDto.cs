@@ -8,7 +8,8 @@ namespace SistemaPOS.Aplication.DTOs
         public DateTime? FechaFacturacion { get;  set; }
         public DateTime? FechaCierre { get;  set; }
         public ClienteDto Cliente { get;  set; }
-        public ProductoDto ProductO { get;  set; }
+        public ProductoDto Producto { get;  set; }
+        public int Cantidad { get; set; }
 
     }
 }

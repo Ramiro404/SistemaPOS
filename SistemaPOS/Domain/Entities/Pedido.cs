@@ -10,10 +10,7 @@
         public int Cantidad { get; private set; }
         public bool Eliminado { get; private set; } = false;
         public int ClienteId { get; private set; }
-        public Cliente Cliente { get; private set; }
-        //public List<Producto> Productos { get; private set; }
         public int ProductoId { get; private set; }
-        public Producto Producto { get; private set; }
 
 
         public Pedido() { }
@@ -26,6 +23,14 @@
             Cantidad = cantidad;
         }
 
+        public Pedido(int pedidoId, int clienteId, int productoId, int cantidad)
+        {
+            Id = pedidoId;
+            FechaCreacion = DateTime.Now;
+            ClienteId = clienteId;
+            ProductoId = productoId;
+            Cantidad = cantidad;
+        }
 
 
         public void Actualizar(List<Producto> productos)
@@ -37,6 +42,11 @@
         public void Cerrar()
         {
             FechaCierre = DateTime.Now;
+        }
+
+        public void Eliminar()
+        {
+            Eliminado = true;
         }
     }
 }

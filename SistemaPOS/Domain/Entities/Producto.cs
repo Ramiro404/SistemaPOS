@@ -13,9 +13,6 @@
         public DateTime? FechaActualizacion { get; private set; }
         public int Stock {  get; private set; }
         public bool Eliminado { get; private set; }
-        /*public int PedidoId { get; private set; }
-        public Pedido Pedido { get; private set; }*/
-        public List<Pedido> Pedidos { get; private set; }
 
 
         public Producto() { }

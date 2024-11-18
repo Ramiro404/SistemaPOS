@@ -8,6 +8,8 @@
         public string ApellidoMaterno { get; private set; }
         public TimeSpan HoraEntrada { get; private set; }
         public TimeSpan HoraSalida { get; private set; }
+        public string User {  get; private set; }
+        public string Password { get; private set; }
         public DateTime? FechaInicioSesion {  get; private set; }
         public DateTime? FechaCierreSesion { get; private set; }
         public bool Eliminado { get; private set; } = false;

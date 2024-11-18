@@ -14,8 +14,6 @@
         public DateTime? FechaActualizacion { get; private set; }
         public bool Eliminado { get; private set; }
 
-        public List<Pedido> Pedidos { get; private set; }
-
         public Cliente() { }
 
         public Cliente(string numeroDocumento, string correo, string telefono, string direccion, string departamento, string ciudad, string colonia)
