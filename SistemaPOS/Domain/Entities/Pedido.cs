@@ -17,7 +17,7 @@
 
         public Pedido(int clienteId, int productoId, int cantidad)
         {
-            FechaCreacion = DateTime.Now;
+            FechaCreacion = DateTime.Now.ToUniversalTime();
             ClienteId = clienteId;
             ProductoId = productoId;
             Cantidad = cantidad;
@@ -26,7 +26,7 @@
         public Pedido(int pedidoId, int clienteId, int productoId, int cantidad)
         {
             Id = pedidoId;
-            FechaCreacion = DateTime.Now;
+            FechaCreacion = DateTime.Now.ToUniversalTime();
             ClienteId = clienteId;
             ProductoId = productoId;
             Cantidad = cantidad;
@@ -41,7 +41,7 @@
 
         public void Cerrar()
         {
-            FechaCierre = DateTime.Now;
+            FechaCierre = DateTime.Now.ToUniversalTime();
         }
 
         public void Eliminar()

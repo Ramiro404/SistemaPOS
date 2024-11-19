@@ -25,7 +25,7 @@
             UnidadMedida = unidadMedida;
             Peso = peso;
             VolumenEmpaque = volumenEmpaque;
-            FechaCreacion = new DateTime();
+            FechaCreacion = DateTime.Now.ToUniversalTime();
             Stock = 0;
             Eliminado = false;
         }
@@ -63,7 +63,7 @@
             UnidadMedida = unidadMedida;
             Peso = peso;
             VolumenEmpaque = volumenEmpaque;
-            FechaActualizacion = DateTime.Now;
+            FechaActualizacion = DateTime.Now.ToUniversalTime();
         }
     }
 }

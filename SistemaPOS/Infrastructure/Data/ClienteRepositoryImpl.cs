@@ -53,26 +53,33 @@ namespace SistemaPOS.Infrastructure.Data
         public async Task EliminarCliente(int id)
         {
             var cliente = await _context.Clientes.FindAsync(id);
-            EsClienteEliminado(cliente.Eliminado);
             if(cliente != null)
             {
+                EsClienteEliminado(cliente.Eliminado);
                 cliente.Eliminar();
+                _context.Entry(cliente).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return;
             }
             throw new Exception("No se encontro el cliente");
         }
 
         public async Task<List<ClienteDto>> ListarCliente()
         {
-            return await _context.Clientes.Select(c => new ClienteDto { 
-                Id= c.Id,
-                Ciudad= c.Ciudad,
-                Colonia= c.Colonia,
-                Correo= c.Correo,
-                Telefono= c.Telefono,
-                Departamento= c.Departamento,
-                Direccion= c.Direccion,
-                NumeroDocumento = c.NumeroDocumento
-            }).ToListAsync();
+            return await (
+                from c in _context.Clientes
+                where !c.Eliminado 
+                select new ClienteDto
+                {
+                    Id = c.Id,
+                    Ciudad = c.Ciudad,
+                    Colonia = c.Colonia,
+                    Correo = c.Correo,
+                    Telefono = c.Telefono,
+                    Departamento = c.Departamento,
+                    Direccion = c.Direccion,
+                    NumeroDocumento = c.NumeroDocumento
+                }).ToListAsync();
         }
 
         private void EsClienteEliminado(bool eliminado)

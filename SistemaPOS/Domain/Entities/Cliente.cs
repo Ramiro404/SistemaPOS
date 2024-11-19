@@ -26,7 +26,7 @@
             Ciudad = ciudad;
             Colonia = colonia;
             Eliminado = false;
-            FechaCreacion = DateTime.Now;
+            FechaCreacion = DateTime.Now.ToUniversalTime();
         }
 
         public void Actualizar(string numeroDocumento, string correo, string telefono, string direccion, string departamento, string ciudad, string colonia)
@@ -39,7 +39,7 @@
             Ciudad = ciudad;
             Colonia = colonia;
             Eliminado = false;
-            FechaActualizacion = DateTime.Now;
+            FechaActualizacion = DateTime.Now.ToUniversalTime();
         }
 
         public void Eliminar()

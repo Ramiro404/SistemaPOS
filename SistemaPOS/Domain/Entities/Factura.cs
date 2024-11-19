@@ -15,7 +15,7 @@
             ValorTotal = valorTotal;
             ValorImpuestos = valorImpuestos;
             ValorDescuento = valorDescuento;
-            FechaCreacion = DateTime.Now;
+            FechaCreacion = DateTime.Now.ToUniversalTime();
         }
 
         public Factura(int id, string folio, decimal valorTotal, decimal valorImpuestos, decimal valorDescuento, DateTime fechaCreacion)

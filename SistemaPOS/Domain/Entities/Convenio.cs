@@ -15,7 +15,7 @@
             Nombre = nombre;
             Descripcion = descripcion;
             PorcentajeDescuento = porcentajeDescuento;
-            FechaCreacion = DateTime.Now;
+            FechaCreacion = DateTime.Now.ToUniversalTime();
         }
 
         public void Actualizar(string nombre, string descripcion, int porcentajeDescuento)
@@ -23,7 +23,7 @@
             Nombre = nombre;
             Descripcion = descripcion;
             PorcentajeDescuento = porcentajeDescuento;
-            FechaActualizacion = DateTime.Now;
+            FechaActualizacion = DateTime.Now.ToUniversalTime();
         }
 
         public void Eliminar()

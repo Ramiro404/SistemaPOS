@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace SistemaPOS.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -53,6 +53,23 @@ namespace SistemaPOS.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Facturas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Folio = table.Column<string>(type: "text", nullable: false),
+                    ValorTotal = table.Column<decimal>(type: "numeric", nullable: false),
+                    ValorImpuestos = table.Column<decimal>(type: "numeric", nullable: false),
+                    ValorDescuento = table.Column<decimal>(type: "numeric", nullable: false),
+                    FechaCreacion = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Facturas", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MedioPagos",
                 columns: table => new
                 {
@@ -90,6 +107,17 @@ namespace SistemaPOS.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PedidosFactura",
+                columns: table => new
+                {
+                    PedidoId = table.Column<int>(type: "integer", nullable: false),
+                    FacturaId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Productos",
                 columns: table => new
                 {
@@ -122,6 +150,8 @@ namespace SistemaPOS.Migrations
                     ApellidoMaterno = table.Column<string>(type: "text", nullable: false),
                     HoraEntrada = table.Column<TimeSpan>(type: "interval", nullable: false),
                     HoraSalida = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    User = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
                     FechaInicioSesion = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     FechaCierreSesion = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Eliminado = table.Column<bool>(type: "boolean", nullable: false)
@@ -142,10 +172,16 @@ namespace SistemaPOS.Migrations
                 name: "Convenios");
 
             migrationBuilder.DropTable(
+                name: "Facturas");
+
+            migrationBuilder.DropTable(
                 name: "MedioPagos");
 
             migrationBuilder.DropTable(
                 name: "Pedidos");
+
+            migrationBuilder.DropTable(
+                name: "PedidosFactura");
 
             migrationBuilder.DropTable(
                 name: "Productos");

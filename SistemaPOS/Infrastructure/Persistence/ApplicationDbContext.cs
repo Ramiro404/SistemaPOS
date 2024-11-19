@@ -21,6 +21,8 @@ namespace SistemaPOS.Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<PedidoFactura>()
+                .HasNoKey();
             /*base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Pedido>()
                 .HasOne(p => p.Producto)

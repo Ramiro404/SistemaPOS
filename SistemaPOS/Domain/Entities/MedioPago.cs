@@ -14,14 +14,14 @@
         {
             Nombre = nombre;
             Descripcion = descripcion;
-            FechaCreacion = DateTime.Now;
+            FechaCreacion = DateTime.Now.ToUniversalTime();
         }
 
         public void Actualizar(string nombre, string descripcion)
         {
             Nombre = nombre;
             Descripcion = descripcion;
-            FechaActualizacion = DateTime.Now;
+            FechaActualizacion = DateTime.Now.ToUniversalTime();
         }
 
         public void Eliminar()

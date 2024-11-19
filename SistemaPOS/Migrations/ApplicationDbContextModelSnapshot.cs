@@ -105,6 +105,35 @@ namespace SistemaPOS.Migrations
                     b.ToTable("Convenios");
                 });
 
+            modelBuilder.Entity("SistemaPOS.Domain.Entities.Factura", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Folio")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("ValorDescuento")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("ValorImpuestos")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("ValorTotal")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Facturas");
+                });
+
             modelBuilder.Entity("SistemaPOS.Domain.Entities.MedioPago", b =>
                 {
                     b.Property<int>("Id")
@@ -170,6 +199,17 @@ namespace SistemaPOS.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Pedidos");
+                });
+
+            modelBuilder.Entity("SistemaPOS.Domain.Entities.PedidoFactura", b =>
+                {
+                    b.Property<int>("FacturaId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PedidoId")
+                        .HasColumnType("integer");
+
+                    b.ToTable("PedidosFactura");
                 });
 
             modelBuilder.Entity("SistemaPOS.Domain.Entities.Producto", b =>
@@ -249,6 +289,14 @@ namespace SistemaPOS.Migrations
                         .HasColumnType("interval");
 
                     b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("User")
                         .IsRequired()
                         .HasColumnType("text");
 

@@ -34,6 +34,9 @@ builder.Services.AddScoped<PedidoService>();
 builder.Services.AddScoped<UsuarioRepository, UsuarioRepositoryImpl>();
 builder.Services.AddScoped<UsuarioService>();
 
+builder.Services.AddScoped<FacturaRepository, FacturaRepositoryImpl>();
+builder.Services.AddScoped<FacturaService>();
+
 
 var app = builder.Build();
 
