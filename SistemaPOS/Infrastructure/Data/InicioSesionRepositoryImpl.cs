@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SistemaPOS.Domain.Entities;
 using SistemaPOS.Domain.Repositories;
 using SistemaPOS.Infrastructure.Persistence;
 
@@ -24,7 +25,22 @@ namespace SistemaPOS.Infrastructure.Data
             {
                 throw new Exception("Usuario o Password incorrecto");
             }
+            await GuardarFechaYHoraIngreso(resultado);
             return resultado.Id;
+        }
+
+        private async Task GuardarFechaYHoraIngreso(Usuario usuario)
+        {
+            usuario.RegistrarIngreso();
+            _context.Entry(usuario).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task GuardarFechaYHoraSalida(Usuario usuario)
+        {
+            usuario.RegistrarSalida();
+            _context.Entry(usuario).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
     }
 }

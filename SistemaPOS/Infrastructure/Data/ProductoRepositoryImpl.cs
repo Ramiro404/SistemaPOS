@@ -19,7 +19,7 @@ namespace SistemaPOS.Infrastructure.Data
         public async Task CrearProducto(Producto producto)
         {
             string productoNombre = producto.Nombre.ToLower();
-            var productoExiste = await _context.Productos.Where(p => p.Nombre.ToLower() == productoNombre).SingleAsync();
+            var productoExiste = await _context.Productos.Where(p => p.Nombre.ToLower() == productoNombre).SingleOrDefaultAsync();
             if(productoExiste is not null)
             {
                 throw new Exception("Este producto ya esta registrado");
@@ -35,6 +35,8 @@ namespace SistemaPOS.Infrastructure.Data
             {
                 EsProductoEliminado(producto.Eliminado);
                 producto.EliminarProducto();
+                _context.Entry(producto).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
             }
             else
             {
@@ -42,10 +44,10 @@ namespace SistemaPOS.Infrastructure.Data
             }
         }
 
-        public async Task<Producto> EditarProducto(Producto producto)
+        public async Task<Producto> EditarProducto(int id, Producto producto)
         {
 
-            var nuevoProducto = await _context.Productos.Where(p => p.Id.Equals(producto.Id)).FirstOrDefaultAsync();
+            var nuevoProducto = await _context.Productos.Where(p => p.Id.Equals(id)).FirstOrDefaultAsync();
 
             if(nuevoProducto != null)
             {
@@ -65,18 +67,32 @@ namespace SistemaPOS.Infrastructure.Data
             throw new Exception("Producto no encontrado");
         }
 
+        public async Task<Producto> ObtenerProductoPorId(int id)
+        {
+            var data =  await _context.Productos.FindAsync(id);
+            if(data != null)
+            {
+                return data;
+            }
+            throw new Exception("No se encontro el producto");
+        } 
+
         public async Task<List<ProductoDto>> ListarProductos()
         {
-            return await _context.Productos.Select(p => new ProductoDto
-            {
-                Id = p.Id,
-                Medida = p.Medida,
-                Nombre = p.Nombre,
-                Peso = p.Peso,
-                UnidadMedida = p.UnidadMedida,
-                ValorUnitario = p.ValorUnitario,
-                VolumenEmpaque = p.VolumenEmpaque
-            }).ToListAsync();
+            return await (
+                from p in _context.Productos
+                where !p.Eliminado
+                select new ProductoDto
+                {
+                    Id = p.Id,
+                    Medida = p.Medida,
+                    Nombre = p.Nombre,
+                    Peso = p.Peso,
+                    UnidadMedida = p.UnidadMedida,
+                    ValorUnitario = p.ValorUnitario,
+                    VolumenEmpaque = p.VolumenEmpaque,
+                    Stock = p.Stock,
+                }).ToListAsync();
         }
 
         public void EsProductoEliminado(bool eliminado)
@@ -92,7 +108,7 @@ namespace SistemaPOS.Infrastructure.Data
             var producto = await _context.Productos.FindAsync(productoId);
             if(producto == null)
             {
-                throw new Exception("No encontro el producto");
+                throw new Exception("No se encontro el producto");
             }
             producto.IngresarInventario(cantidad);
             _context.Entry(producto).State = EntityState.Modified;

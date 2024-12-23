@@ -9,5 +9,6 @@ namespace SistemaPOS.Domain.Repositories
         public Task<Usuario> EditarUsuario(int id, Usuario usuario);
         public Task EliminarUsuario(int id);
         public Task<List<Usuario>> ListarUsuario();
+        public Task<Usuario> ObtenerUsuarioPorId(int id);
     }
 }

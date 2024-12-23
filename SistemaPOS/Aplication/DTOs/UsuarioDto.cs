@@ -6,8 +6,8 @@
         public string Nombre { get;  set; }
         public string ApellidoPaterno { get; set; }
         public string ApellidoMaterno { get; set; }
-        public TimeSpan HoraEntrada { get; set; }
-        public TimeSpan HoraSalida { get;  set; }
+        public string HoraEntrada { get; set; }
+        public string HoraSalida { get;  set; }
         public DateTime? FechaInicioSesion { get;  set; }
         public DateTime? FechaCierreSesion { get;    set; }
     }

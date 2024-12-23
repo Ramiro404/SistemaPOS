@@ -13,7 +13,6 @@
 
     public class EditarProductoDto: CrearProductoDto {
 
-        public int Id { get; set; }
 
     }
 }

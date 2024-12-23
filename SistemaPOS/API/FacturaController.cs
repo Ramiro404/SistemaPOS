@@ -17,22 +17,62 @@ namespace SistemaPOS.API
             _facturaService = facturaService;
         }
 
-        [HttpGet("Impresion/{id}")]
-        public async Task<FacturaImpresionDto> ObtenerFacturaImpresion(int id)
+        [HttpGet()]
+        public async Task<IActionResult> ListarFacturados()
         {
-            return await _facturaService.ImprimirFactura(id);
+            try
+            {
+                var data = await _facturaService.ListarFacturados();
+                return Ok(new Utils.SuccessResult<List<PedidoFacturadoDto>>(data));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
+        }
+
+        [HttpGet("Impresion/{id}")]
+        public async Task<IActionResult> ObtenerFacturaImpresion(int id)
+        {
+            try
+            {
+                var data = await _facturaService.ImprimirFactura(id);
+                return Ok(new Utils.SuccessResult<FacturaImpresionDto>(data));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
         }
 
         [HttpGet("Cliente/{clienteId}")]
-        public async Task<List<Factura>> ListarFacturasClienteId(int clienteId)
+        public async Task<IActionResult> ListarFacturasClienteId(int clienteId)
         {
-            return await _facturaService.ListarFacturasCliente(clienteId);
+            try
+            {
+                var data = await _facturaService.ListarFacturasCliente(clienteId);
+                return Ok(new Utils.SuccessResult<List<Factura>>(data));
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
         }
 
-        [HttpPost]
-        public async Task FacturarPedidos(List<PedidoDto> pedidos)
+        [HttpPost("{pedidoId}")]
+        public async Task<IActionResult> FacturarPedidos(int pedidoId)
         {
-            await _facturaService.FacturarPedido(pedidos);
+            try
+            {
+                await _facturaService.FacturarPedido(pedidoId);
+                return Ok(new Utils.SuccessResult<dynamic>(null));
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
         }
     }
 }

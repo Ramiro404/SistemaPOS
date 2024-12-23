@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SistemaPOS.Aplication.DTOs;
 using SistemaPOS.Aplication.Services;
+using SistemaPOS.Domain.Entities;
 
 namespace SistemaPOS.API
 {
@@ -19,15 +20,59 @@ namespace SistemaPOS.API
         [HttpPost]
         public async Task<ActionResult> Ingresar(CrearPedidoDto pedido)
         {
-            await _pedidoService.IngresarPedidoAsync(pedido);
-            return Created();
+            try
+            {
+                await _pedidoService.IngresarPedidoAsync(pedido);
+                return CreatedAtAction(
+                    nameof(Ingresar),
+                    new Utils.SuccessResult<dynamic>(null));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
         }
 
-        [HttpPatch]
+        [HttpPatch("Cerrar")]
         public async Task<ActionResult> Cerrar(int id)
         {
-            await _pedidoService.CerrarPedidoAsync(id);
-            return Ok();
+            try
+            {
+                await _pedidoService.CerrarPedidoAsync(id);
+                return Ok(new Utils.SuccessResult<dynamic>(null));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
+        }
+
+        [HttpGet("Pendientes")]
+        public async Task<ActionResult> ListarPendientes()
+        {
+            try
+            {
+                var data = await _pedidoService.ListarPedidosPendientesAsync();
+                return Ok(new Utils.SuccessResult<List<PedidoPendienteDto>>(data));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
+        }
+
+        [HttpGet("Facturados")]
+        public async Task<ActionResult> ListarFacturados()
+        {
+            try
+            {
+                var data = await _pedidoService.ListarPedidoFacturadosAsync();
+                return Ok(new Utils.SuccessResult<List<PedidoFacturadoDto>>(data));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
         }
     }
 }

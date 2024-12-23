@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SistemaPOS.Aplication.DTOs;
 using SistemaPOS.Aplication.Services;
+using SistemaPOS.Domain.Entities;
 
 namespace SistemaPOS.API
 {
@@ -19,41 +20,106 @@ namespace SistemaPOS.API
         [HttpPost]
         public async Task<ActionResult> Crear(CrearProductoDto producto)
         {
-            await _productoService.CrearProductoAsync(producto);
-            return Created();
+            try
+            {
+                await _productoService.CrearProductoAsync(producto);
+                return Ok(new Utils.SuccessResult<dynamic>(null));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult> ObtenerPorId(int id)
+        {
+            try
+            {
+                var productos = await _productoService.ObtenerPorIdAsync(id);
+                return Ok(new Utils.SuccessResult<ProductoDto>(productos));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult> Listar()
         {
-            var productos = await _productoService.ListarProductoAsync();
-            return Ok(productos);
+            try
+            {
+                var productos = await _productoService.ListarProductoAsync();
+                return Ok(new Utils.SuccessResult<List<ProductoDto>>(productos));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
         }
 
         [HttpPatch("{id}")]
         public async Task<ActionResult> Editar(int id, EditarProductoDto producto)
         {
-            producto.Id = id;
-            await _productoService.EditarProductoAsync(producto);
-            return Ok();
+
+            try
+            {
+                await _productoService.EditarProductoAsync(id, producto);
+                return Ok(new Utils.SuccessResult<dynamic>(null));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
+
         }
 
         [HttpPatch("ingresarInventario")]
         public async Task<ActionResult> IngresarInventario(IngresarInventarioDto ingresarInventarioDto)
         {
-            await _productoService.IngresarInventarioAsync(
+            try
+            {
+                await _productoService.IngresarInventarioAsync(
                 ingresarInventarioDto.ProductoId,
                 ingresarInventarioDto.Cantidad);
-            return Ok();
+                return Ok(new Utils.SuccessResult<dynamic>(null));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
         }
 
         [HttpPatch("descontarInventario")]
         public async Task<ActionResult> DescontarInventario(DescontarInventarioDto descontarInventarioDto)
         {
-            await _productoService.DescontarInventarioAsync(
+            try
+            {
+                await _productoService.DescontarInventarioAsync(
                 descontarInventarioDto.ProductoId,
                 descontarInventarioDto.Cantidad);
-            return Ok();
+                return Ok(new Utils.SuccessResult<dynamic>(null));
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Eliminar(int id)
+        {
+            try
+            {
+                await _productoService.EliminarProductoAsync(id);
+                return Ok(new Utils.SuccessResult<dynamic>(null));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
         }
 
 

@@ -54,7 +54,10 @@ namespace SistemaPOS.Infrastructure.Data
 
         public async Task<List<MedioPago>> ListarMedioPago()
         {
-            return await _context.MedioPagos.ToListAsync();
+            return await (
+                from mp in _context.MedioPagos
+                where !mp.Eliminado
+                select mp).ToListAsync();
         }
     }
 }

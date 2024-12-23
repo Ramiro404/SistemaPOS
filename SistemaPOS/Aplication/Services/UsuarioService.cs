@@ -1,6 +1,7 @@
 ﻿using SistemaPOS.Aplication.DTOs;
 using SistemaPOS.Domain.Entities;
 using SistemaPOS.Domain.Repositories;
+using System.Globalization;
 
 namespace SistemaPOS.Aplication.Services
 {
@@ -19,8 +20,12 @@ namespace SistemaPOS.Aplication.Services
                 crearUsuarioDto.Nombre,
                 crearUsuarioDto.ApellidoPaterno,
                 crearUsuarioDto.ApellidoMaterno,
-                crearUsuarioDto.HoraEntrada,
-                crearUsuarioDto.HoraSalida);
+                crearUsuarioDto.User,
+                crearUsuarioDto.Password,
+                TimeOnly.Parse(crearUsuarioDto.HoraEntrada, CultureInfo.InvariantCulture),
+                TimeOnly.Parse(crearUsuarioDto.HoraSalida, CultureInfo.InvariantCulture),
+                crearUsuarioDto.FechaInicioSesion,
+                crearUsuarioDto.FechaCierreSesion);
             await _usuarioRepository.CrearUsuario(usuario);
         }
 
@@ -30,10 +35,9 @@ namespace SistemaPOS.Aplication.Services
                 editarUsuarioDto.Nombre,
                 editarUsuarioDto.ApellidoPaterno,
                 editarUsuarioDto.ApellidoMaterno,
-                editarUsuarioDto.HoraEntrada,
-                editarUsuarioDto.HoraSalida,
-                editarUsuarioDto.FechaInicioSesion,
-                editarUsuarioDto.FechaCierreSesion);
+                TimeOnly.Parse(editarUsuarioDto.HoraEntrada, CultureInfo.InvariantCulture),
+                TimeOnly.Parse(editarUsuarioDto.HoraSalida, CultureInfo.InvariantCulture)
+                );
             await _usuarioRepository.EditarUsuario(id, usuarioEditar);
         }
 
@@ -52,11 +56,28 @@ namespace SistemaPOS.Aplication.Services
                 ApellidoPaterno = u.ApellidoPaterno,
                 FechaCierreSesion = u.FechaCierreSesion,
                 FechaInicioSesion = u.FechaInicioSesion,
-                HoraEntrada = u.HoraEntrada,
-                HoraSalida = u.HoraSalida,
+                HoraEntrada = u.HoraEntrada.ToString("t"),
+                HoraSalida = u.HoraSalida.ToString("t"),
                 Nombre = u.Nombre
             }).ToList();
         }
+
+        public async Task<UsuarioDto> ObtenerUsuarioDtoPorId(int id)
+        {
+            var usuario = await _usuarioRepository.ObtenerUsuarioPorId(id);
+            return new UsuarioDto
+            {
+                Id = usuario.Id,
+                ApellidoMaterno = usuario.ApellidoMaterno,
+                ApellidoPaterno = usuario.ApellidoPaterno,
+                FechaCierreSesion = usuario.FechaCierreSesion,
+                FechaInicioSesion = usuario.FechaInicioSesion,
+                HoraEntrada = usuario.HoraEntrada.ToString("t"),
+                HoraSalida = usuario.HoraSalida.ToString("t"),
+                Nombre = usuario.Nombre
+            };
+        }
+
 
     }
 }

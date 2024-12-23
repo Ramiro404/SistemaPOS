@@ -37,14 +37,14 @@
 
         public void IngresarInventario(int stock)
         {
-            if (!this.Eliminado) throw new Exception("Este producto esta eliminado");
+            if (this.Eliminado) throw new Exception("Este producto esta eliminado");
             if (stock < 0) throw new ArgumentOutOfRangeException("No ingresar numeros negativos");
             this.Stock += stock;
         }
 
         public void DescontarInventario(int stock)
         {
-            if (!this.Eliminado) throw new Exception("Este producto esta eliminado");
+            if (this.Eliminado) throw new Exception("Este producto esta eliminado");
             if (stock < 0) throw new ArgumentOutOfRangeException("No ingresar numeros negativos");
             if(this.Stock < stock) throw new Exception("No puedes descontar la cantidad permitida");
             this.Stock -= stock;

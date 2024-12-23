@@ -24,20 +24,14 @@ namespace SistemaPOS.Aplication.Services
             return await _facturaRepository.ListarFacturaDeCliente(clienteId);
         }
 
-        public async Task FacturarPedido(List<PedidoDto> pedidos)
+        public async Task FacturarPedido(int pedidoId)
         {
-            List<Pedido> pedidoList = new List<Pedido>();
-            foreach(var pedidoDto in pedidos)
-            {
-                var pedido = new Pedido(
-                    pedidoDto.Id,
-                    pedidoDto.Cliente.Id,
-                    pedidoDto.Producto.Id,
-                    pedidoDto.Cantidad);
+            await _facturaRepository.FacturarPedido(pedidoId);
+        }
 
-                pedidoList.Add(pedido);
-
-            }
+        public async Task<List<PedidoFacturadoDto>> ListarFacturados()
+        {
+            return await _facturaRepository.ListarFacturas();
         }
     }
 }

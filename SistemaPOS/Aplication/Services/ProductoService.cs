@@ -26,7 +26,7 @@ namespace SistemaPOS.Aplication.Services
 
         }
 
-        public async Task EditarProductoAsync(EditarProductoDto editarProductoDto)
+        public async Task EditarProductoAsync(int id, EditarProductoDto editarProductoDto)
         {
             var producto = new Producto(
                 editarProductoDto.Nombre,
@@ -35,8 +35,7 @@ namespace SistemaPOS.Aplication.Services
                 editarProductoDto.UnidadMedida,
                 editarProductoDto.Peso,
                 editarProductoDto.VolumenEmpaque);
-            producto.EstablecerId(editarProductoDto.Id);
-            await _productoRepository.EditarProducto(producto);
+            await _productoRepository.EditarProducto(id, producto);
         }
 
         public async Task EliminarProductoAsync(int id)
@@ -57,6 +56,20 @@ namespace SistemaPOS.Aplication.Services
         public async Task DescontarInventarioAsync(int productoId, int cantidad)
         {
             await _productoRepository.DescontarInventario(productoId, cantidad);
+        }
+
+        public async Task<ProductoDto> ObtenerPorIdAsync(int id)
+        {
+            var producto =  await _productoRepository.ObtenerProductoPorId(id);
+            return new ProductoDto {
+                Id=producto.Id,
+                Medida=producto.Medida,
+                Nombre=producto.Nombre,
+                Peso = producto.Peso,
+                ValorUnitario = producto.ValorUnitario,
+                UnidadMedida = producto.UnidadMedida,
+                VolumenEmpaque = producto.VolumenEmpaque
+            };
         }
     }
 }

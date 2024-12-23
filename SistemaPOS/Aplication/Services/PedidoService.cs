@@ -7,21 +7,34 @@ namespace SistemaPOS.Aplication.Services
     public class PedidoService
     {
         private readonly PedidoRepository _pedidoRepository;
+        private readonly PedidoDetalleRepository _pedidoDetalleRepository;
+        private readonly ProductoRepository _productoRepository;
 
-        public PedidoService(PedidoRepository pedidoRepository)
+        public PedidoService(
+            PedidoRepository pedidoRepository,
+            PedidoDetalleRepository pedidoDetalleRepository,
+            ProductoRepository productoRepository
+            )
         {
             _pedidoRepository = pedidoRepository;
+            _pedidoDetalleRepository = pedidoDetalleRepository;
+            _productoRepository = productoRepository;
         }
 
         public async Task IngresarPedidoAsync(CrearPedidoDto crearPedidoDto)
         {
-            foreach(var producto in crearPedidoDto.Productos)
+            var pedido = await _pedidoRepository.IngresarPedido(
+                new Pedido(crearPedidoDto.ClienteId));
+
+            foreach (var pedidoDetalleDto in crearPedidoDto.Pedidos)
             {
-                Pedido pedido = new Pedido(
-                    crearPedidoDto.ClienteId,
-                    producto.producto.Id,
-                    producto.cantidad);
-                await _pedidoRepository.IngresarPedido(pedido);
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(
+                    pedido.Id,
+                    pedidoDetalleDto.cantidad,
+                    pedidoDetalleDto.ProductoId
+                    );
+                await _pedidoDetalleRepository.GuardarPedidoDetalle(pedidoDetalle);
+                await _productoRepository.DescontarInventario(pedidoDetalle.ProductoId, pedidoDetalle.Cantidad);
             }
         }
 
@@ -36,6 +49,15 @@ namespace SistemaPOS.Aplication.Services
             await _pedidoRepository.CerrarPedido(id);
         }
 
+        public async Task<List<PedidoPendienteDto>> ListarPedidosPendientesAsync()
+        {
+           return await _pedidoRepository.ListarPedidosPendientes();
+        }
+
+        public async Task<List<PedidoFacturadoDto>> ListarPedidoFacturadosAsync()
+        {
+            return await _pedidoRepository.PedidosFacturados();
+        }
 
     }
 }

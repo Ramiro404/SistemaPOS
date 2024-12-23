@@ -18,29 +18,73 @@ namespace SistemaPOS.API
         }
 
         [HttpGet]
-        public async Task<List<UsuarioDto>> Listar()
+        public async Task<IActionResult> Listar()
         {
-            return await _usuarioService.ListarUsuarioDto();
+            try
+            {
+                var data = await _usuarioService.ListarUsuarioDto();
+                return Ok(new Utils.SuccessResult<List<UsuarioDto>>(data));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> ObtenerPorId(int id)
+        {
+            try
+            {
+                var data = await _usuarioService.ObtenerUsuarioDtoPorId(id);
+                return Ok(new Utils.SuccessResult<UsuarioDto>(data));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult> Crear(CrearUsuarioDto crearUsuarioDto)
         {
-            await _usuarioService.CrearUsuarioAsync(crearUsuarioDto);
-            return Created();
+            try
+            {
+                await _usuarioService.CrearUsuarioAsync(crearUsuarioDto);
+                return Ok(new Utils.SuccessResult<dynamic>(null)); ;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
         }
 
-        [HttpPatch("{id}")]
-        public async Task Editar(int id, EditarUsuarioDto editarUsuarioDto)
+            [HttpPatch("{id}")]
+        public async Task<IActionResult> Editar(int id, EditarUsuarioDto editarUsuarioDto)
         {
-            await _usuarioService.EditarUsuarioDto(id, editarUsuarioDto);
+            try
+            {
+                await _usuarioService.EditarUsuarioDto(id, editarUsuarioDto);
+                return Ok(new Utils.SuccessResult<dynamic>(null)); ;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Eliminar(int id)
         {
-            await _usuarioService.EliminarUsuarioAsync(id);
-            return Ok();
+            try
+            {
+                await _usuarioService.EliminarUsuarioAsync(id);
+                return Ok(new Utils.SuccessResult<dynamic>(null)); ;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
         }
     }
 }

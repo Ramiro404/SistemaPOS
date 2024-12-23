@@ -12,8 +12,8 @@ using SistemaPOS.Infrastructure.Persistence;
 namespace SistemaPOS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241119210357_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20241206172846_PedidoDetalle")]
+    partial class PedidoDetalle
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -175,14 +175,14 @@ namespace SistemaPOS.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Cantidad")
-                        .HasColumnType("integer");
-
                     b.Property<int>("ClienteId")
                         .HasColumnType("integer");
 
                     b.Property<bool>("Eliminado")
                         .HasColumnType("boolean");
+
+                    b.Property<int?>("FacturaId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("FechaActualizacion")
                         .HasColumnType("timestamp with time zone");
@@ -195,9 +195,6 @@ namespace SistemaPOS.Migrations
 
                     b.Property<DateTime?>("FechaFacturacion")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("ProductoId")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -285,11 +282,11 @@ namespace SistemaPOS.Migrations
                     b.Property<DateTime?>("FechaInicioSesion")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<TimeSpan>("HoraEntrada")
-                        .HasColumnType("interval");
+                    b.Property<TimeOnly>("HoraEntrada")
+                        .HasColumnType("time without time zone");
 
-                    b.Property<TimeSpan>("HoraSalida")
-                        .HasColumnType("interval");
+                    b.Property<TimeOnly>("HoraSalida")
+                        .HasColumnType("time without time zone");
 
                     b.Property<string>("Nombre")
                         .IsRequired()

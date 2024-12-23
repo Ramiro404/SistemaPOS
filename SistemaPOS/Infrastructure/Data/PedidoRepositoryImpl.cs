@@ -1,4 +1,6 @@
-﻿using SistemaPOS.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using SistemaPOS.Aplication.DTOs;
+using SistemaPOS.Domain.Entities;
 using SistemaPOS.Domain.Repositories;
 using SistemaPOS.Infrastructure.Persistence;
 
@@ -13,6 +15,25 @@ namespace SistemaPOS.Infrastructure.Data
             _context = context;
         }
 
+        public async Task<List<PedidoPendienteDto>> ListarPedidosPendientes()
+        {
+            var pedidosPendientes = await _context.Pedidos
+                    .Where(p => p.FechaCierre == null)
+                    .ToListAsync();
+            var pedidosPendientesDto = new List<PedidoPendienteDto>();
+            foreach(var pedido in pedidosPendientes)
+            {
+                var cliente = await _context.Clientes.FindAsync(pedido.ClienteId);
+                pedidosPendientesDto.Add(new PedidoPendienteDto
+                {
+                    ClienteId = cliente.Id,
+                    NumeroDocumento = cliente.NumeroDocumento,
+                    Unidades = 0
+                });
+            }
+            return pedidosPendientesDto;
+        }
+
         public async Task CerrarPedido(int id)
         {
             var pedido = await _context.Pedidos.FindAsync(id);
@@ -25,14 +46,16 @@ namespace SistemaPOS.Infrastructure.Data
             throw new Exception("No se encontro el pedido");
         }
 
-        public async Task IngresarPedido(Pedido pedido)
+        public async Task<Pedido> IngresarPedido(Pedido pedido)
         {
             var clienteExiste = _context.Clientes.FirstOrDefault(c => c.Id == pedido.ClienteId);
             if(clienteExiste == null) {
                 throw new Exception("El cliente no existe");
             }
+
             _context.Pedidos.Add(pedido);
             await _context.SaveChangesAsync();
+            return pedido;
         }
 
         public async Task<Pedido> ModificarPedido(int id, Pedido pedido)
@@ -75,6 +98,20 @@ namespace SistemaPOS.Infrastructure.Data
             {
                 throw new Exception("El pedido ya esta eliminado");
             }
+        }
+
+        public async Task<List<PedidoFacturadoDto>> PedidosFacturados()
+        {
+            return await (
+                from pf in _context.Pedidos 
+                join cl in _context.Clientes on pf.ClienteId equals cl.Id
+                where pf.FacturaId != null
+                select new PedidoFacturadoDto
+                {
+                    Id= pf.Id,
+                    FechaFacturacion= pf.FechaFacturacion ?? new DateTime(),
+                    NumeroDocumento= cl.NumeroDocumento,
+                }).ToListAsync();
         }
     }
 }

@@ -57,7 +57,22 @@ namespace SistemaPOS.Infrastructure.Data
 
         public async Task<List<Usuario>> ListarUsuario()
         {
-            return await _context.Usuarios.ToListAsync();
+            return await (
+                from u in _context.Usuarios
+                where !u.Eliminado
+                select u
+                ).ToListAsync();
         }
+
+        public async Task<Usuario> ObtenerUsuarioPorId(int id)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if(usuario != null)
+            {
+                return usuario;
+            }
+            throw new Exception("No se encontro el usuario");
+        }
+
     }
 }

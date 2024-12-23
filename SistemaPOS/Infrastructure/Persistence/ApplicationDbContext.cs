@@ -3,7 +3,7 @@ using SistemaPOS.Domain.Entities;
 
 namespace SistemaPOS.Infrastructure.Persistence
 {
-    public class ApplicationDbContext: DbContext
+    public class ApplicationDbContext : DbContext
     {
 
         public DbSet<Producto> Productos { get; set; }
@@ -14,6 +14,7 @@ namespace SistemaPOS.Infrastructure.Persistence
         public DbSet<MedioPago> MedioPagos { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Factura> Facturas { get; set; }
+        public DbSet<PedidoDetalle> PedidosDetalle { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base(options)
         {
             

@@ -41,16 +41,29 @@ namespace SistemaPOS.Infrastructure.Data
             var convenio = await _context.Convenios.FindAsync(id);
             if(convenio != null)
             {
+                EsEliminado(convenio.Eliminado);
                 convenio.Eliminar();
-                _context.Entry(_context).State = EntityState.Modified;
+                _context.Entry(convenio).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
+                return;
             }
             throw new Exception("No se encontro el convenio");
         }
 
         public async Task<List<Convenio>> ListarConvenio()
         {
-            return await _context.Convenios.ToListAsync();
+            return await (
+                from c in _context.Convenios
+                where !c.Eliminado
+                select c).ToListAsync();
+        }
+
+        private void EsEliminado(bool eliminado)
+        {
+            if (eliminado)
+            {
+                throw new Exception("Convenio eliminado");
+            }
         }
     }
 }

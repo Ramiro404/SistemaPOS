@@ -7,29 +7,24 @@
         public DateTime? FechaActualizacion { get; private set; }
         public DateTime? FechaFacturacion { get; private set; }
         public DateTime? FechaCierre { get; private set; }
-        public int Cantidad { get; private set; }
         public bool Eliminado { get; private set; } = false;
         public int ClienteId { get; private set; }
-        public int ProductoId { get; private set; }
+        public int? FacturaId { get; private set; }
 
 
         public Pedido() { }
 
-        public Pedido(int clienteId, int productoId, int cantidad)
+        public Pedido(int clienteId)
         {
             FechaCreacion = DateTime.Now.ToUniversalTime();
             ClienteId = clienteId;
-            ProductoId = productoId;
-            Cantidad = cantidad;
         }
 
-        public Pedido(int pedidoId, int clienteId, int productoId, int cantidad)
+        public Pedido(int pedidoId, int clienteId)
         {
             Id = pedidoId;
             FechaCreacion = DateTime.Now.ToUniversalTime();
             ClienteId = clienteId;
-            ProductoId = productoId;
-            Cantidad = cantidad;
         }
 
 
@@ -47,6 +42,11 @@
         public void Eliminar()
         {
             Eliminado = true;
+        }
+
+        public void setFacturaId(int id)
+        {
+            this.FacturaId = id;
         }
     }
 }

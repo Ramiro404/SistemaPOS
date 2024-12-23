@@ -16,30 +16,60 @@ namespace SistemaPOS.API
         }
 
         [HttpPost]
-        public async Task<ActionResult> Crear(CrearMedioPagoDto crearMedioPagoDto)
+        public async Task<IActionResult> Crear(CrearMedioPagoDto crearMedioPagoDto)
         {
-            await _medioPagoService.CrearMedioPagoAsync(crearMedioPagoDto);
-            return Created();
+            try
+            {
+                await _medioPagoService.CrearMedioPagoAsync(crearMedioPagoDto);
+                return CreatedAtAction(
+                    nameof(Crear),
+                    new Utils.SuccessResult<dynamic>(null));
+            }catch(Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
         }
 
         [HttpPatch("{id}")]
         public async Task<ActionResult> Editar(int id, EditarMedioPago editarMedioPagoDto)
         {
-            await _medioPagoService.EditarMedioPagoAsync(id, editarMedioPagoDto);
-            return Ok();
+            try
+            {
+                await _medioPagoService.EditarMedioPagoAsync(id, editarMedioPagoDto);
+                return Ok(new Utils.SuccessResult<dynamic>(null));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
         }
 
         [HttpGet]
-        public async Task<List<MedioPagoDto>> Listar()
+        public async Task<IActionResult> Listar()
         {
-            return await _medioPagoService.ListarMedioPagoAsync();
+            try
+            {
+                var data = await _medioPagoService.ListarMedioPagoAsync();
+                return Ok(new Utils.SuccessResult<List<MedioPagoDto>>(data));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Eliminar(int id )
         {
-            await _medioPagoService.EliminarMedioPagoAsync(id);
-            return Ok();
+            try
+            {
+                await _medioPagoService.EliminarMedioPagoAsync(id);
+                return Ok(new Utils.SuccessResult<dynamic>(null));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Utils.BadResult(ex.Message));
+            }
         }
     }
 }

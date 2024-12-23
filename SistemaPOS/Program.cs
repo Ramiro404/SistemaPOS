@@ -37,6 +37,11 @@ builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<FacturaRepository, FacturaRepositoryImpl>();
 builder.Services.AddScoped<FacturaService>();
 
+builder.Services.AddScoped<InicioSesionRepository, InicioSesionRepositoryImpl>();
+builder.Services.AddScoped<InicioSesionService>();
+
+builder.Services.AddScoped<PedidoDetalleRepository, PedidoDetalleRepositoryImpl>();
+
 
 var app = builder.Build();
 
@@ -46,6 +51,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+app.UseCors(builder => builder
+     .AllowAnyOrigin()
+     .AllowAnyMethod()
+     .AllowAnyHeader());
 
 app.UseHttpsRedirection();
 

@@ -9,6 +9,7 @@
         public string UnidadMedida { get; set; }
         public float Peso { get; set; }
         public float VolumenEmpaque { get; set; }
+        public int Stock {  get; set; }
     }
 
     public class ProductoCantidadDto
